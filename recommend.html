@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Haven - Recommendations</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .navbar {
+            background-color: #5a67d8;
+        }
+        .navbar-brand {
+            color: #fff !important;
+            font-weight: bold;
+        }
+        .search-bar {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .genre-list {
+            margin-bottom: 40px;
+        }
+        .book-list {
+            margin-top: 20px;
+        }
+        .book-card {
+            background-color: #fff;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .book-title {
+            color: #5a67d8;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Book Haven</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search for books by title, author, or genre..." onkeyup="filterBooks()">
+        </div>
+
+        <div class="genre-list text-center">
+            <h2>Find Books by Genre</h2>
+            <div class="row">
+                <div class="col genre-item">
+                    <button class="btn btn-outline-primary" onclick="filterGenre('horror')">Horror</button>
+                </div>
+                <div class="col genre-item">
+                    <button class="btn btn-outline-primary" onclick="filterGenre('love')">Love</button>
+                </div>
+                <div class="col genre-item">
+                    <button class="btn btn-outline-primary" onclick="filterGenre('comedy')">Comedy</button>
+                </div>
+                <div class="col genre-item">
+                    <button class="btn btn-outline-primary" onclick="filterGenre('thriller')">Thriller</button>
+                </div>
+                <div class="col genre-item">
+                    <button class="btn btn-outline-primary" onclick="filterGenre('adventure')">Adventure</button>
+                </div>
+                <div class="col genre-item">
+                    <button class="btn btn-outline-primary" onclick="filterGenre('kids')">Kids</button>
+                </div>
+                <div class="col genre-item">
+                    <button class="btn btn-outline-primary" onclick="filterGenre('education')">Education</button>
+                </div>
+                <div class="col genre-item">
+                    <button class="btn btn-outline-primary" onclick="filterGenre('biography')">Biography</button>
+                </div>
+                <div class="col genre-item">
+                    <button class="btn btn-outline-primary" onclick="filterGenre('science')">Science</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-list" id="bookList">
+            <!-- Books will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        const books = [
+    // Horror
+    { title: 'Dracula', author: 'Bram Stoker', genre: 'horror', rating: 4.3, description: 'A classic horror story of a vampire.' },
+    { title: 'It', author: 'Stephen King', genre: 'horror', rating: 4.4, description: 'A chilling tale of an evil clown.' },
+    { title: 'The Shining', author: 'Stephen King', genre: 'horror', rating: 4.5, description: 'A haunted hotel brings terror to its residents.' },
+    { title: 'Frankenstein', author: 'Mary Shelley', genre: 'horror', rating: 4.2, description: 'A scientist creates a monster in this gothic classic.' },
+    { title: 'The Exorcist', author: 'William Peter Blatty', genre: 'horror', rating: 4.1, description: 'A tale of demonic possession and exorcism.' },
+
+    // Love
+    { title: 'Pride and Prejudice', author: 'Jane Austen', genre: 'love', rating: 4.6, description: 'A timeless romance novel.' },
+    { title: 'The Notebook', author: 'Nicholas Sparks', genre: 'love', rating: 4.2, description: 'A heartfelt love story.' },
+    { title: 'Me Before You', author: 'Jojo Moyes', genre: 'love', rating: 4.3, description: 'A touching romance about unexpected love.' },
+    { title: 'Outlander', author: 'Diana Gabaldon', genre: 'love', rating: 4.4, description: 'A historical romance with a time-travel twist.' },
+    { title: 'The Time Traveler’s Wife', author: 'Audrey Niffenegger', genre: 'love', rating: 4.1, description: 'A love story complicated by time travel.' },
+
+    // Comedy
+    { title: 'Bossypants', author: 'Tina Fey', genre: 'comedy', rating: 4.1, description: 'A hilarious memoir by Tina Fey.' },
+    { title: 'Good Omens', author: 'Neil Gaiman and Terry Pratchett', genre: 'comedy', rating: 4.5, description: 'A comedic tale of the apocalypse.' },
+    { title: 'Hitchhiker’s Guide to the Galaxy', author: 'Douglas Adams', genre: 'comedy', rating: 4.6, description: 'A science fiction comedy adventure.' },
+    { title: 'Yes Please', author: 'Amy Poehler', genre: 'comedy', rating: 4.0, description: 'A funny and heartfelt memoir by Amy Poehler.' },
+    { title: 'The Rosie Project', author: 'Graeme Simsion', genre: 'comedy', rating: 4.3, description: 'A romantic comedy about a genetics professor.' },
+
+    // Thriller
+    { title: 'The Girl with the Dragon Tattoo', author: 'Stieg Larsson', genre: 'thriller', rating: 4.4, description: 'A gripping thriller with twists.' },
+    { title: 'Gone Girl', author: 'Gillian Flynn', genre: 'thriller', rating: 4.2, description: 'A psychological thriller about a missing woman.' },
+    { title: 'The Da Vinci Code', author: 'Dan Brown', genre: 'thriller', rating: 4.0, description: 'A mystery thriller involving ancient secrets.' },
+    { title: 'Sharp Objects', author: 'Gillian Flynn', genre: 'thriller', rating: 4.1, description: 'A dark thriller about a troubled journalist.' },
+    { title: 'The Silent Patient', author: 'Alex Michaelides', genre: 'thriller', rating: 4.3, description: 'A psychological thriller with a shocking twist.' },
+
+    // Adventure
+    { title: 'The Hobbit', author: 'J.R.R. Tolkien', genre: 'adventure', rating: 4.7, description: 'An adventurous journey to reclaim a lost kingdom.' },
+    { title: 'Treasure Island', author: 'Robert Louis Stevenson', genre: 'adventure', rating: 4.3, description: 'A thrilling tale of pirates and treasure.' },
+    { title: 'The Call of the Wild', author: 'Jack London', genre: 'adventure', rating: 4.4, description: 'The story of a dog’s survival in the wilderness.' },
+    { title: 'Into the Wild', author: 'Jon Krakauer', genre: 'adventure', rating: 4.2, description: 'The true story of a man’s journey into the wild.' },
+    { title: 'The Lost City of Z', author: 'David Grann', genre: 'adventure', rating: 4.1, description: 'A search for a legendary city in the Amazon.' },
+
+    // Kids
+    { title: 'Harry Potter and the Sorcerer’s Stone', author: 'J.K. Rowling', genre: 'kids', rating: 4.9, description: 'The first adventure of Harry Potter at Hogwarts.' },
+    { title: 'Charlotte’s Web', author: 'E.B. White', genre: 'kids', rating: 4.8, description: 'A story of friendship between a pig and a spider.' },
+    { title: 'Matilda', author: 'Roald Dahl', genre: 'kids', rating: 4.7, description: 'A tale of a gifted girl and her adventures.' },
+    { title: 'The Lion, the Witch and the Wardrobe', author: 'C.S. Lewis', genre: 'kids', rating: 4.8, description: 'The first Chronicles of Narnia adventure.' },
+    { title: 'Percy Jackson and the Olympians', author: 'Rick Riordan', genre: 'kids', rating: 4.7, description: 'The adventures of a demigod in the modern world.' },
+
+    // Education
+    { title: 'Educated', author: 'Tara Westover', genre: 'education', rating: 4.7, description: 'A memoir about the power of education.' },
+    { title: 'The Smartest Kids in the World', author: 'Amanda Ripley', genre: 'education', rating: 4.3, description: 'An investigation into education systems worldwide.' },
+    { title: 'Why We Sleep', author: 'Matthew Walker', genre: 'education', rating: 4.6, description: 'A deep dive into the science of sleep.' },
+    { title: 'Sapiens', author: 'Yuval Noah Harari', genre: 'education', rating: 4.6, description: 'A brief history of humankind.' },
+    { title: 'How Children Succeed', author: 'Paul Tough', genre: 'education', rating: 4.3, description: 'A look at what helps children thrive in life.' },
+
+    // Biography
+    { title: 'The Diary of a Young Girl', author: 'Anne Frank', genre: 'biography', rating: 4.7, description: 'The diary of Anne Frank during WWII.' },
+    { title: 'Steve Jobs', author: 'Walter Isaacson', genre: 'biography', rating: 4.5, description: 'The life and career of Steve Jobs.' },
+    { title: 'Becoming', author: 'Michelle Obama', genre: 'biography', rating: 4.6, description: 'The memoir of Michelle Obama.' },
+    { title: 'Long Walk to Freedom', author: 'Nelson Mandela', genre: 'biography', rating: 4.8, description: 'The autobiography of Nelson Mandela.' },
+    { title: 'Alexander Hamilton', author: 'Ron Chernow', genre: 'biography', rating: 4.6, description: 'A comprehensive biography of Alexander Hamilton.' },
+
+    // Science
+    { title: 'A Brief History of Time', author: 'Stephen Hawking', genre: 'science', rating: 4.7, description: 'An exploration of the universe’s mysteries.' },
+    { title: 'The Selfish Gene', author: 'Richard Dawkins', genre: 'science', rating: 4.6, description: 'A gene-centered view of evolution.' },
+    { title: 'The Gene: An Intimate History', author: 'Siddhartha Mukherjee', genre: 'science', rating: 4.6, description: 'A history of genetic science.' },
+    { title: 'Cosmos', author: 'Carl Sagan', genre: 'science', rating: 4.8, description: 'A journey through the universe.' },
+    { title: 'Astrophysics for People in a Hurry', author: 'Neil deGrasse Tyson', genre: 'science', rating: 4.5, description: 'An accessible introduction to astrophysics.' }
+];
+
+
+        function displayBooks(filteredBooks) {
+            const bookList = document.getElementById('bookList');
+            bookList.innerHTML = '';
+            filteredBooks.forEach(book => {
+                const bookCard = `
+                    <div class="book-card">
+                        <h3 class="book-title">${book.title}</h3>
+                        <p><strong>Author:</strong> ${book.author}</p>
+                        <p><strong>Genre:</strong> ${book.genre}</p>
+                        <p><strong>Rating:</strong> ${book.rating}</p>
+                        <p>${book.description}</p>
+                    </div>
+                `;
+                bookList.innerHTML += bookCard;
+            });
+        }
+
+        function filterBooks() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const filteredBooks = books.filter(book =>
+                book.title.toLowerCase().includes(searchInput) ||
+                book.author.toLowerCase().includes(searchInput) ||
+                book.genre.toLowerCase().includes(searchInput)
+            );
+            displayBooks(filteredBooks);
+        }
+
+        function filterGenre(genre) {
+            const filteredBooks = books.filter(book => book.genre === genre);
+            displayBooks(filteredBooks);
+        }
+
+        // Display all books initially
+        displayBooks(books);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
